@@ -18,11 +18,10 @@ pipeline{
         }
         stage('Push Docker'){
               steps {
-             script{
-                   docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$BUILD_NUMBER")
-             dockerImage.push('latest')
-             }
+                withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'docker-hub-acess-token')]) {
+                    sh 'docker  login -u newyaf44 p- docker-hub-access-token'
+                    sh 'docker push myimage:${BUILD_NUMBER}'
+                }
             }
         }
     }
