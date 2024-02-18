@@ -3,6 +3,7 @@ pipeline{
   environment {
     imagename = "newyaf44/myimage"
     registryCredential = 'docker-cred'
+    pwd='docker-hub-access-token'
     dockerImage = ''
   }
     stages{
@@ -19,7 +20,7 @@ pipeline{
         stage('Push Docker'){
               steps {
                 withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'docker-hub-acess-token')]) {
-                    sh 'docker  login -u newyaf44 p- ${docker-hub-access-token}'
+                    sh 'docker  login -u newyaf44 p- ${pwd}'
                     sh 'docker push myimage:${BUILD_NUMBER}'
                 }
             }
