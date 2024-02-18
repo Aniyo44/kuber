@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub-access-token')
+	}
     stages{
         stage('Check Github'){
             steps{
@@ -14,7 +17,7 @@ pipeline{
         stage('Push Docker'){
               steps {
                 withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'docker-hub-acess-token')]) {
-            sh "echo $dockerHubAccessToken | docker login -u newyaf44 --password-stdin"
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     sh 'docker push my-image:${BUILD_NUMBER}'
                 }
             }
