@@ -1,8 +1,10 @@
 pipeline{
     agent any
-    environment {
-		DOCKERHUB_CREDENTIALS=credentials('docker-hub-access-token')
-	}
+  environment {
+    imagename = "newyaf44/myimage"
+    registryCredential = 'docker-cred'
+    dockerImage = ''
+  }
     stages{
         stage('Check Github'){
             steps{
@@ -11,15 +13,16 @@ pipeline{
         }
         stage('Build Docker'){
             steps{
-                sh 'docker build -t my-image:${BUILD_NUMBER} .'
+                sh 'docker build -t myimage:${BUILD_NUMBER} .' 
             }
         }
         stage('Push Docker'){
               steps {
-                withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'docker-hub-acess-token')]) {
-                    sh 'docker  login -u newyaf44 p- DOCKERHUB-CREDENTIALS-credentials'
-                    sh 'docker push my-image:${BUILD_NUMBER}'
-                }
+             script{
+                   docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+             }
             }
         }
     }
