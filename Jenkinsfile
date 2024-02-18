@@ -17,13 +17,6 @@ pipeline{
                 sh 'docker build -t myimage:${BUILD_NUMBER} .' 
             }
         }
-        stage('Push Docker'){
-              steps {
-                withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'docker-hub-acess-token')]) {
-                    sh "echo ${docker-hub-access-token} | docker login -u newyaf44 --password-stdin"
-                    sh 'docker push myimage:${BUILD_NUMBER}'
-                }
-            }
-        }
+      
     }
 }
