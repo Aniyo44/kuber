@@ -19,7 +19,7 @@ pipeline{
         stage('Push Docker'){
               steps {
                 withCredentials([string(credentialsId: 'docker-hub-access-token', variable: 'docker-hub-acess-token')]) {
-                    sh 'docker  login -u newyaf44 p- docker-hub-access-token'
+                    sh 'docker  login -u newyaf44 p- ${docker-hub-access-token}'
                     sh 'docker push myimage:${BUILD_NUMBER}'
                 }
             }
